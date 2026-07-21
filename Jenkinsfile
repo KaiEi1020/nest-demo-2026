@@ -7,12 +7,6 @@ pipeline {
     }
 
     stages {
-        stage('Checkout') {
-            steps {
-                git branch: 'main', url: 'https://github.com/KaiEi1020/nest-demo-2026.git'
-            }
-        }
-
         stage('Build Image') {
             steps {
                 sh "docker build -t ${IMAGE_NAME} ."
