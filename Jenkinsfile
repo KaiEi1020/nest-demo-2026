@@ -9,7 +9,7 @@ pipeline {
         // 阿里云个人版 ACR
         ACR_REGISTRY = 'crpi-iao9ofa54ta9eu5t.cn-hangzhou.personal.cr.aliyuncs.com'
         // 在 ACR 控制台创建的命名空间，按实际修改
-        ACR_NAMESPACE = 'nest-demo'
+        ACR_NAMESPACE = 'lethe1020'
         ACR_IMAGE = "${ACR_REGISTRY}/${ACR_NAMESPACE}/${IMAGE_NAME}"
     }
 
