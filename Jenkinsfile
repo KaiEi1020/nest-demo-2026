@@ -16,7 +16,7 @@ pipeline {
     stages {
         stage('Build Image') {
             steps {
-                sh "docker build -t ${IMAGE_NAME}:${IMAGE_TAG} -t ${IMAGE_NAME}:latest ."
+                sh "docker buildx build --platform linux/amd64 --load -t ${IMAGE_NAME}:${IMAGE_TAG} -t ${IMAGE_NAME}:latest ."
             }
         }
 
@@ -42,14 +42,14 @@ pipeline {
             }
         }
 
-        stage('Deploy') {
-            steps {
-                sh "docker stop ${CONTAINER_NAME} || true"
-                sh "docker rm ${CONTAINER_NAME} || true"
-                // 使用本次建的唯一版本部署，避免 latest 缓存问题
-                sh "docker run -d --name ${CONTAINER_NAME} -p 3000:3000 ${ACR_IMAGE}:${IMAGE_TAG}"
-            }
-        }
+        // stage('Deploy') {
+        //     steps {
+        //         sh "docker stop ${CONTAINER_NAME} || true"
+        //         sh "docker rm ${CONTAINER_NAME} || true"
+        //         // 使用本次建的唯一版本部署，避免 latest 缓存问题
+        //         sh "docker run -d --name ${CONTAINER_NAME} -p 3000:3000 ${ACR_IMAGE}:${IMAGE_TAG}"
+        //     }
+        // }
     }
 
     post {
