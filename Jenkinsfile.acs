@@ -9,7 +9,7 @@ dockerAcsDeployFromGit(
     // ACS 集群 kubeconfig 文件凭据 ID
     kubeconfigCredentialId: 'acs-kubeconfig',
 
-    imageName: 'nest-demo-app',
+    imageName: 'nest-demo-app2',
     k8sDeployment: 'my-web-app',
     k8sContainer: 'web',
     k8sNamespace: 'default'
