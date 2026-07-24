@@ -1,0 +1,16 @@
+@Library('pipeline-lib') _
+
+dockerAcsDeployFromGit(
+    repoUrl: 'https://github.com/KaiEi1020/nest-demo-2026.git',
+    acrRegistry: 'crpi-iao9ofa54ta9eu5t.cn-hangzhou.personal.cr.aliyuncs.com',
+    acrNamespace: 'lethe1020',
+    acrCredentialId: 'aliyun-acr-token',
+
+    // ACS 集群 kubeconfig 文件凭据 ID
+    kubeconfigCredentialId: 'acs-kubeconfig',
+
+    imageName: 'nest-demo-app',
+    k8sDeployment: 'my-web-app',
+    k8sContainer: 'web',
+    k8sNamespace: 'default'
+)
