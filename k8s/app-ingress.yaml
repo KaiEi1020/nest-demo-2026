@@ -1,0 +1,68 @@
+# ==========================================
+# 使用 ingress 的示例， 暂未使用过
+# 1. 部署应用 (Deployment) - 负责管理 Pod
+# ==========================================
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: my-web-app
+  namespace: default
+  labels:
+    app: my-web
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: my-web
+  template:
+    metadata:
+      labels:
+        app: my-web
+    spec:
+      imagePullSecrets:
+        - name: acr-secret
+      containers:
+        - name: web
+          image: crpi-iao9ofa54ta9eu5t.cn-hangzhou.personal.cr.aliyuncs.com/lethe1020/nest-demo-app2:4-ee916e8b9884
+          ports:
+            - containerPort: 3000
+
+---
+# ==========================================
+# 2. 内部服务暴露 (Service) - 注意：这里用 ClusterIP 即可！
+# ==========================================
+apiVersion: v1
+kind: Service
+metadata:
+  name: my-web-service
+  namespace: default
+spec:
+  type: ClusterIP # 💡 关键点：不需要公网 IP，仅供集群内部（Ingress）访问
+  ports:
+    - name: http
+      port: 80          # Service 监听端口
+      targetPort: 3000  # 对应 NestJS 容器端口
+  selector:
+    app: my-web
+
+---
+# ==========================================
+# 3. 公网路由网关 (Ingress) - 负责统一入口与流量分发
+# ==========================================
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: my-web-ingress
+  namespace: default
+spec:
+  ingressClassName: alb # 指定网关类型（如阿里云 ALB 或开源 NGINX）
+  rules:
+    - http:
+        paths:
+          - path: /           # 匹配所有访问路径
+            pathType: Prefix
+            backend:
+              service:
+                name: my-web-service  # 💡 联动指向上面的 Service 名称
+                port:
+                  number: 80           # 指向 Service 的端口
